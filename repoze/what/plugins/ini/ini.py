@@ -41,6 +41,8 @@ class INIAdapter(BaseSourceAdapter):
 
         """
         super(BaseSourceAdapter, self).__init__()
+        # for now, the adapter is read-only
+        self.is_writable = False
         self.filename = filename
         self.info = parse_INIFile(self.filename)
 
@@ -85,15 +87,6 @@ class INIAdapter(BaseSourceAdapter):
 class INIGroupAdapter(INIAdapter):
     """INI Group Adapter."""
 
-    def __init__(self, filename):
-        """
-        Create an INI group adapter.
-
-        @param filename: The filename with the sections information.
-
-        """
-        super(INIGroupAdapter, self).__init__(filename)
-
     def _find_sections(self, hint):
         userid = hint['repoze.who.userid']
         answer = []
@@ -105,15 +98,6 @@ class INIGroupAdapter(INIAdapter):
 
 class INIPermissionsAdapter(INIAdapter):
     """INI Permissions Adapters."""
-
-    def __init__(self, filename):
-        """
-        Create an INI permissions adapter.
-
-        @param filename: The filename with the sections information.
-
-        """
-        super(INIPermissionsAdapter, self).__init__(filename)
 
     def _find_sections(self, hint):
         answer = []
