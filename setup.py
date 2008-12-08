@@ -20,7 +20,10 @@ setup(name='repoze.what.plugins.ini',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
+      tests_require=['repoze.what', 'nose'],
+      test_suite="nose.collector",
       install_requires=['repoze.what', 'pyparsing'],
       namespace_packages=['repoze', 'repoze.what', 'repoze.what.plugins'],
-      entry_points='',
+      entry_points="""\
+      """,
       )

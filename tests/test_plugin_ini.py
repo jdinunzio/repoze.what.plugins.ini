@@ -18,14 +18,15 @@
 import os.path
 import unittest
 
-from repoze.what.adapters.testutil import GroupsAdapterTester
-from repoze.what.adapters.testutil import PermissionsAdapterTester
+from repoze.what.adapters.testutil import ReadOnlyGroupsAdapterTester, \
+                                          ReadOnlyPermissionsAdapterTester
 
 from repoze.what.plugins.ini import INIGroupAdapter
 from repoze.what.plugins.ini import INIPermissionsAdapter
 
 
-class TestINIGroupAdapterTester(GroupsAdapterTester, unittest.TestCase):
+class TestINIGroupAdapterTester(ReadOnlyGroupsAdapterTester, 
+                                unittest.TestCase):
     '''Test Suite for INI group source adapter.'''
     def setUp(self):
         super(TestINIGroupAdapterTester, self).setUp()
@@ -34,7 +35,8 @@ class TestINIGroupAdapterTester(GroupsAdapterTester, unittest.TestCase):
         self.adapter = INIGroupAdapter(fake_groups)
 
 
-class TestINIPermissionsTester(PermissionsAdapterTester, unittest.TestCase):
+class TestINIPermissionsAdapterTester(ReadOnlyPermissionsAdapterTester, 
+                               unittest.TestCase):
     '''Test Suite for INI permission source adapter.'''
     def setUp(self):
         super(TestINIPermissionsAdapterTester, self).setUp()

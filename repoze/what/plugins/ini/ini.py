@@ -48,10 +48,10 @@ class INIAdapter(BaseSourceAdapter):
 
 
     def _get_all_sections(self):
-        return self.info.keys()
+        return self.info
 
     def _get_section_items(self, section):
-        return set(sef.info[section])
+        return set(self.info[section])
 
     def _find_sections(self, hint):
         raise SourceError('This is implemented in the groups and '
@@ -61,24 +61,8 @@ class INIAdapter(BaseSourceAdapter):
         raise SourceError('For including items you must edit the '
                           'INI file directly.')
 
-    def _exclude_items(self, section, items):
-        raise SourceError('For excluding items you must edit the '
-                          'INI file directly.')
-
     def _item_is_included(self, section, item):
         return item in self.info[section]
-
-    def _create_section(self, section):
-        raise SourceError('For create a new section you must edit the '
-                          'INI file directly.')
-
-    def _edit_section(self, section, new_section):
-        raise SourceError('For edit a section you must edit the '
-                          'INI file directly.')
-
-    def _delete_section(self, section):
-        raise SourceError('For delete a section you must edit the '
-                          'INI file directly.')
 
     def _section_exists(self, section):
         return section in self.info
@@ -89,10 +73,10 @@ class INIGroupAdapter(INIAdapter):
 
     def _find_sections(self, hint):
         userid = hint['repoze.who.userid']
-        answer = []
+        answer = set()
         for section in self.info.keys():
             if userid in self.info[section]:
-                answer.append(section)
+                answer.add(section)
         return answer
 
 
@@ -100,10 +84,10 @@ class INIPermissionsAdapter(INIAdapter):
     """INI Permissions Adapters."""
 
     def _find_sections(self, hint):
-        answer = []
+        answer = set()
         for section in self.info.keys():
             if hint in self.info[section]:
-                answer.append(section)
+                answer.add(section)
         return answer
 
 

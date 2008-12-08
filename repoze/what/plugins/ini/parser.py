@@ -13,40 +13,43 @@
 #
 ##############################################################################
 
-from pyparsing import Group
-from pyparsing import Literal
-from pyparsing import OneOrMore
-from pyparsing import Optional
-from pyparsing import Or 
-from pyparsing import Regex
-from pyparsing import Suppress 
-from pyparsing import Word
 from pyparsing import alphas
 from pyparsing import alphanums
+from pyparsing import Combine
+from pyparsing import Group
+from pyparsing import Optional
+from pyparsing import restOfLine
+from pyparsing import Suppress
+from pyparsing import White
+from pyparsing import Word
+from pyparsing import ZeroOrMore
 
 
 # Parser definition
-identifier = Word(alphas, alphanums + '_')
-comment = Suppress(Regex('#.*'))
-header_openpar = Suppress(Literal('['))
-header_closepar = Suppress(Literal(']'))
+#   A little more complicated than is needed today, but needed to preserve 
+#   comments in future versions.
+identifier = Word(alphas, alphanums + '_-')
+blank = White(' \t\n\r\f') #.leaveWhitespace()
+comment = Combine(Optional(White(' \t')) + '#' + restOfLine)
+comment_header = Optional(Combine(ZeroOrMore(comment | blank)), default='')
+comment_inline = Optional(comment, default= '')
+item = Group(comment_header + identifier + comment_inline)
+section_header = comment_header + Suppress('[') + identifier + Suppress(']') + comment_inline
+section_body = Group(ZeroOrMore(item))
+section = Group(section_header + Optional(section_body, []))
+parser = Group(ZeroOrMore(section)) + Optional(comment_header)
+parser.leaveWhitespace()
 
-header = header_openpar + identifier + header_closepar
-item = identifier + Optional(comment)
-body = Group(OneOrMore(Or([item, comment])))
-section = Group(header + body)
-config = OneOrMore(section)
 
 def parse_INIFile(filename):
     info = {}
-    _info = config.parseFile(filename)
-    for k, vs in _info:
-        info[k] = []
-        for v in vs:
-            info[k].append(v)
-    print info
+    secs, _ = parser.parseFile(filename)
+    for _, sec, _, items in secs:
+        sec = unicode(sec)
+        info[sec] = set()
+        for item in items:
+            _, v, _ = item
+            v = unicode(v)
+            info[sec].add(v)
     return info
 
-
-if __name__ == '__main__' :
-    print parse_INIFile('test.ini')
