@@ -72,7 +72,7 @@ class INIGroupAdapter(INIAdapter):
     """INI Group Adapter."""
 
     def _find_sections(self, hint):
-        userid = hint['repoze.who.userid']
+        userid = hint['repoze.what.userid']
         answer = set()
         for section in self.info.keys():
             if userid in self.info[section]:
