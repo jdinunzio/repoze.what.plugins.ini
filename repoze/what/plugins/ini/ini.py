@@ -40,7 +40,7 @@ class INIAdapter(BaseSourceAdapter):
         @param filename: The filename with the sections information.
 
         """
-        super(BaseSourceAdapter, self).__init__()
+        super(INIAdapter, self).__init__()
         # for now, the adapter is read-only
         self.is_writable = False
         self.filename = filename
