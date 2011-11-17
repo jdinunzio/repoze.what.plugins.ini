@@ -85,6 +85,8 @@ class INIPermissionsAdapter(INIAdapter):
 
     def _find_sections(self, hint):
         answer = set()
+        if isinstance(hint, dict):
+            hint = hint['repoze.who.userid']
         for section in self.info.keys():
             if hint in self.info[section]:
                 answer.add(section)
