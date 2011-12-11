@@ -26,9 +26,9 @@ from pyparsing import ZeroOrMore
 
 
 # Parser definition
-#   A little more complicated than is needed today, but needed to preserve 
+#   A little more complicated than is needed today, but needed to preserve
 #   comments in future versions.
-identifier = Word(alphas, alphanums + '_-')
+identifier = Word(alphas, alphanums + '_-!@$%^&*()<>/|\,.')
 blank = White(' \t\n\r\f') #.leaveWhitespace()
 comment = Combine(Optional(White(' \t')) + '#' + restOfLine)
 comment_header = Optional(Combine(ZeroOrMore(comment | blank)), default='')
